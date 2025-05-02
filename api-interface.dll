@@ -1,0 +1,46 @@
+import json
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+class ApiService:
+    def __init__(self):
+        self.data_store = {}
+
+    def get_data(self, id):
+        try:
+            if id in self.data_store:
+                logging.info(f"Retrieved data for ID: {id}")
+                return json.dumps({"id": id, "data": self.data_store[id]})
+            else:
+                logging.warning(f"Data for ID {id} not found.")
+                return json.dumps({"error": "Data not found"})
+        except Exception as e:
+            logging.error(f"Error retrieving data for ID {id}: {e}")
+            return json.dumps({"error": "Internal server error"})
+
+    def send_data(self, id, data):
+        try:
+            self.data_store[id] = data
+            logging.info(f"Data stored for ID: {id}")
+            return json.dumps({"success": True, "message": f"Data stored for ID: {id}"})
+        except Exception as e:
+            logging.error(f"Error storing data for ID {id}: {e}")
+            return json.dumps({"error": "Internal server error"})
+
+
+if __name__ == "__main__":
+    api_service = ApiService()
+
+    # Store data
+    response = api_service.send_data(123, "Sample data")
+    print(response)
+
+    # Retrieve data
+    response = api_service.get_data(123)
+    print(response)
+
+    # Attempt to retrieve non-existent data
+    response = api_service.get_data(999)
+    print(response)
