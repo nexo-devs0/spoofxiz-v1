@@ -68,7 +68,7 @@ def is_admin():
 def main():
     print_banner()
 
-    # Ask for user confirmation to continue
+
     start = input("Do you want to start the spoofing process? (y/n): ").strip().lower()
     if start != 'y':
         print("[!] Exiting...")
